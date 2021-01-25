@@ -71,7 +71,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1611585154640,
+  "iteration": 1611599388935,
   "links": [],
   "panels": [
     {
@@ -243,13 +243,160 @@
       "type": "stat"
     },
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "keep_state",
+        "for": "1m",
+        "frequency": "30s",
+        "handler": 1,
+        "message": "{{B}} nodes have been unreachable for at least 1 minute.",
+        "name": "Unreachable Akka.Cluster Nodes",
+        "noDataState": "no_data",
+        "notifications": []
+      },
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "Tracks all nodes by their membership status and reachability.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 29,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.7",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "ceil(avg by(status)(akka_net_akka_cluster_members))",
+          "interval": "",
+          "legendFormat": "{{status}}",
+          "refId": "A"
+        },
+        {
+          "expr": "ceil(avg(akka_net_akka_cluster_reachable))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Unreachable",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 0
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Cluster Nodes by Status",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 14
       },
       "id": 8,
       "panels": [],
@@ -275,7 +422,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 15
       },
       "hiddenSeries": false,
       "id": 6,
@@ -304,24 +451,20 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "$$hashKey": "object:2204",
           "alias": "error",
           "color": "#F2495C",
           "fill": 1
         },
         {
-          "$$hashKey": "object:2226",
           "alias": "warning",
           "color": "#FA6400",
           "fill": 2
         },
         {
-          "$$hashKey": "object:2244",
           "alias": "info",
           "color": "#73BF69"
         },
         {
-          "$$hashKey": "object:2249",
           "alias": "debug",
           "color": "#C8F2C2"
         }
@@ -331,7 +474,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(level)(increase(akka_net_akka_logs{app=~\"$role\",akka_address=~\"$address\"}[1m]))",
+          "expr": "sum by(level)(increase(akka_net_akka_logs{cluster_role=~\"$role\",akka_address=~\"$address\"}[1m]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -396,7 +539,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 23
       },
       "id": 10,
       "links": [],
@@ -434,9 +577,10 @@
       ],
       "targets": [
         {
-          "expr": "sum by(app,akka_address,exceptiontype)(ceil(increase(akka_net_akka_logs{app=~\"$role\",akka_address=~\"$address\",exceptiontype=~\".+\"}[5m])))",
+          "expr": "sum by(cluster_role,akka_address,exceptiontype)(ceil(increase(akka_net_akka_logs{cluster_role=~\"$role\",akka_address=~\"$address\",exceptiontype=~\".+\"}[5m])))",
           "format": "table",
           "instant": true,
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -455,7 +599,6 @@
           "custom": {},
           "mappings": [
             {
-              "$$hashKey": "object:1552",
               "id": 0,
               "op": "=",
               "text": "N/A",
@@ -485,7 +628,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 23
       },
       "id": 12,
       "interval": null,
@@ -508,10 +651,12 @@
       "pluginVersion": "7.3.7",
       "targets": [
         {
-          "expr": "sum(increase(akka_net_akka_logs{level=\"error\",app=~\"$role\",akka_address=~\"$address\"}[5m]))",
+          "expr": "sum(increase(akka_net_akka_logs{level=\"error\",cluster_role=~\"$role\",akka_address=~\"$address\"}[5m]))",
           "format": "time_series",
           "instant": false,
+          "interval": "",
           "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -525,7 +670,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 32
       },
       "id": 2,
       "panels": [],
@@ -552,7 +697,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 33
       },
       "hiddenSeries": false,
       "id": 4,
@@ -587,11 +732,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(app,akka_address)(akka_net_akka_actor_created{app=~\"$role\",akka_address=~\"$address\"}) - sum by(app,akka_address)(akka_net_akka_actor_stopped{app=~\"$role\",akka_address=~\"$address\"})",
+          "expr": "sum by(cluster_role,akka_address)(akka_net_akka_actor_created{cluster_role=~\"$role\",akka_address=~\"$address\"}) - sum by(cluster_role,akka_address)(akka_net_akka_actor_stopped{cluster_role=~\"$role\",akka_address=~\"$address\"})",
           "format": "time_series",
           "instant": false,
+          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Total Actors [{{app}} ({{akka_address}})]",
+          "legendFormat": "Total Actors [{{cluster_role}} ({{akka_address}})]",
           "refId": "A"
         }
       ],
@@ -645,7 +791,6 @@
           "custom": {},
           "mappings": [
             {
-              "$$hashKey": "object:1504",
               "id": 0,
               "op": "=",
               "text": "N/A",
@@ -675,7 +820,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 33
       },
       "id": 16,
       "interval": null,
@@ -698,7 +843,7 @@
       "pluginVersion": "7.3.7",
       "targets": [
         {
-          "expr": "sum(irate(akka_net_akka_messages_recv_total{app=~\"$role\",akka_address=~\"$address\"}[1m]))",
+          "expr": "sum(irate(akka_net_akka_messages_recv_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[1m]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -725,7 +870,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 42
       },
       "id": 14,
       "links": [],
@@ -738,7 +883,6 @@
       },
       "styles": [
         {
-          "$$hashKey": "object:786",
           "alias": "Time",
           "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -747,7 +891,6 @@
           "type": "date"
         },
         {
-          "$$hashKey": "object:787",
           "alias": "Created",
           "align": "auto",
           "colorMode": null,
@@ -763,7 +906,6 @@
           "unit": "short"
         },
         {
-          "$$hashKey": "object:1238",
           "alias": "Terminated",
           "align": "auto",
           "colorMode": null,
@@ -783,7 +925,7 @@
       ],
       "targets": [
         {
-          "expr": "topk(10,sum by(actortype)(akka_net_akka_actor_created{app=~\"$role\",akka_address=~\"$address\"}))",
+          "expr": "topk(10,sum by(actortype)(akka_net_akka_actor_created{cluster_role=~\"$role\",akka_address=~\"$address\"}))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -792,7 +934,7 @@
           "refId": "A"
         },
         {
-          "expr": "topk(10,sum by(actortype)(akka_net_akka_actor_stopped{app=~\"$role\",akka_address=~\"$address\"}))",
+          "expr": "topk(10,sum by(actortype)(akka_net_akka_actor_stopped{cluster_role=~\"$role\",akka_address=~\"$address\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{actortype}} terminated",
@@ -839,7 +981,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 36
+        "y": 42
       },
       "id": 20,
       "options": {
@@ -889,7 +1031,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 45
+        "y": 51
       },
       "id": 18,
       "options": {
@@ -907,7 +1049,7 @@
       "pluginVersion": "7.3.7",
       "targets": [
         {
-          "expr": "topk(10,sum by(messagetype)(rate(akka_net_akka_messages_recv_total{app=~\"$role\",akka_address=~\"$address\"}[5m])))",
+          "expr": "topk(10,sum by(messagetype)(rate(akka_net_akka_messages_recv_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[5m])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -915,7 +1057,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum by(messagetype)(irate(akka_net_akka_messages_recv_total{app=~\"$role\",akka_address=~\"$address\"}[1m]))",
+          "expr": "sum by(messagetype)(irate(akka_net_akka_messages_recv_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[1m]))",
           "hide": true,
           "instant": false,
           "interval": "",
@@ -957,7 +1099,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 45
+        "y": 51
       },
       "id": 21,
       "options": {
@@ -975,7 +1117,7 @@
       "pluginVersion": "7.3.7",
       "targets": [
         {
-          "expr": "topk(10,sum by(messagetype)(increase(akka_net_akka_messages_recv_total{app=~\"$role\",akka_address=~\"$address\"}[5m])))",
+          "expr": "topk(10,sum by(messagetype)(increase(akka_net_akka_messages_recv_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[5m])))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -1004,7 +1146,7 @@
         "allValue": null,
         "current": {},
         "datasource": "${DS_PROMETHEUS}",
-        "definition": "label_values(app)",
+        "definition": "label_values(cluster_role)",
         "error": null,
         "hide": 0,
         "includeAll": true,
@@ -1012,7 +1154,7 @@
         "multi": true,
         "name": "role",
         "options": [],
-        "query": "label_values(app)",
+        "query": "label_values(cluster_role)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1090,5 +1232,5 @@
   "timezone": "",
   "title": "Akka.NET Cluster Metrics",
   "uid": "8Y4JcEfGk",
-  "version": 5
+  "version": 7
 }
