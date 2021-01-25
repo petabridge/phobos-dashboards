@@ -71,7 +71,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1611518267273,
+  "iteration": 1611585154640,
   "links": [],
   "panels": [
     {
@@ -112,8 +112,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 7,
+        "w": 19,
         "x": 0,
         "y": 1
       },
@@ -135,18 +135,46 @@
       "pluginVersion": "7.3.7",
       "targets": [
         {
-          "expr": "count(group by(member_address)(akka_net_akka_cluster_members_total{status=\"Up\"}))",
+          "expr": "ceil(avg(akka_net_akka_cluster_members{status=\"Up\"}))",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{member_address}}.up",
+          "legendFormat": "Up",
           "refId": "A"
         },
         {
-          "expr": "count(group by(member_address)(akka_net_akka_cluster_members_total{status=\"Removed\"}))",
+          "expr": "ceil(avg(akka_net_akka_cluster_members{status=\"WeaklyUp\"}))",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{member_address}}.remove",
+          "legendFormat": "WeaklyUp",
           "refId": "B"
+        },
+        {
+          "expr": "ceil(avg(akka_net_akka_cluster_members{status=\"Joining\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Joining",
+          "refId": "C"
+        },
+        {
+          "expr": "ceil(avg(akka_net_akka_cluster_members{status=\"Leaving\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Leaving",
+          "refId": "D"
+        },
+        {
+          "expr": "ceil(avg(akka_net_akka_cluster_members{status=\"Exiting\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Exiting",
+          "refId": "E"
+        },
+        {
+          "expr": "ceil(avg(akka_net_akka_cluster_members{status=\"Down\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Down",
+          "refId": "F"
         }
       ],
       "timeFrom": null,
@@ -156,13 +184,72 @@
       "type": "stat"
     },
     {
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "All nodes in the cluster that are detected to be unreachable.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "expr": "ceil(avg(akka_net_akka_cluster_reachable))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Unreachable Nodes",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 8
       },
       "id": 8,
       "panels": [],
@@ -188,7 +275,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 9
       },
       "hiddenSeries": false,
       "id": 6,
@@ -309,7 +396,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 17
       },
       "id": 10,
       "links": [],
@@ -398,7 +485,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 17
       },
       "id": 12,
       "interval": null,
@@ -438,7 +525,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 26
       },
       "id": 2,
       "panels": [],
@@ -465,7 +552,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 27
       },
       "hiddenSeries": false,
       "id": 4,
@@ -588,7 +675,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 28
+        "y": 27
       },
       "id": 16,
       "interval": null,
@@ -638,7 +725,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 37
+        "y": 36
       },
       "id": 14,
       "links": [],
@@ -752,7 +839,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 37
+        "y": 36
       },
       "id": 20,
       "options": {
@@ -802,7 +889,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 46
+        "y": 45
       },
       "id": 18,
       "options": {
@@ -870,7 +957,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 46
+        "y": 45
       },
       "id": 21,
       "options": {
@@ -1003,5 +1090,5 @@
   "timezone": "",
   "title": "Akka.NET Cluster Metrics",
   "uid": "8Y4JcEfGk",
-  "version": 8
+  "version": 5
 }
