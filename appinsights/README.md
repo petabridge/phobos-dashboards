@@ -1,0 +1,2 @@
+# Akka.NET + Phobos Dashboard for Azure Application Insights
+This dashboard is intended to be used in combination with [Phobos](https://phobos.petabridge.com/) and optionally, the [Phobos + Application Insights tutorial]() **TBD**.
