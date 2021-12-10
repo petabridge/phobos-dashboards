@@ -65,7 +65,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1614204421706,
+  "iteration": 1639101488163,
   "links": [],
   "panels": [
     {
@@ -786,24 +786,20 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "$$hashKey": "object:809",
           "alias": "error",
           "color": "#F2495C",
           "fill": 1
         },
         {
-          "$$hashKey": "object:821",
           "alias": "warning",
           "color": "#FF9830",
           "fill": 2
         },
         {
-          "$$hashKey": "object:833",
           "alias": "info",
           "color": "#96D98D"
         },
         {
-          "$$hashKey": "object:858",
           "alias": "debug",
           "color": "#C8F2C2"
         }
@@ -889,7 +885,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:895",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -898,7 +893,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:896",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -2047,6 +2041,137 @@
       "timeShift": null,
       "title": "Akka.NET Message Totals by Type  (Top 10 over 5 minutes)",
       "type": "bargauge"
+    },
+    {
+      "datasource": "${DS_INFLUXDB}",
+      "description": "Akka.NET message processing latencies by actor / message type. Values are in milliseconds.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "decimals": 4,
+          "mappings": [],
+          "min": -3,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 56
+      },
+      "id": 32,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "mean (mean)"
+          }
+        ]
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "5m"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "actortype"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "messagetype"
+              ],
+              "type": "tag"
+            }
+          ],
+          "limit": 10,
+          "measurement": "akka.net__akka.messages.latency",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "table",
+          "select": [
+            [
+              {
+                "params": [
+                  "mean"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "akka_address",
+              "operator": "=~",
+              "value": "/^$address$/"
+            },
+            {
+              "condition": "AND",
+              "key": "cluster_role",
+              "operator": "=~",
+              "value": "/^$role$/"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Message Processing Latencies by Type (Top 10)",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "actortype": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "mean": {
+                "aggregations": [
+                  "mean"
+                ],
+                "operation": "aggregate"
+              },
+              "messagetype": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "10s",
@@ -2137,5 +2262,5 @@
   "timezone": "",
   "title": "Akka.NET Cluster + Phobos Metrics (Influx Data Source)",
   "uid": "k_srkKsMz",
-  "version": 18
+  "version": 19
 }

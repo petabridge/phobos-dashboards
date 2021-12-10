@@ -71,7 +71,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1611599388935,
+  "iteration": 1639086616787,
   "links": [],
   "panels": [
     {
@@ -1131,6 +1131,88 @@
       "title": "Akka.NET Message Totals by Type  (Top 10 over 5 minutes)",
       "transformations": [],
       "type": "bargauge"
+    },
+    {
+      "datasource": "${DS_PROMETHEUS}",
+      "description": "Akka.NET message processing latencies by actor / message type. Values are in milliseconds.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 60
+      },
+      "id": 31,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Value (mean)"
+          }
+        ]
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "expr": "topk(10,avg by(actortype,messagetype)(akka_net_akka_messages_latency{cluster_role=~\"$role\",akka_address=~\"$address\"}))",
+          "format": "table",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Message Processing Latencies by Type (Top 10)",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Value": {
+                "aggregations": [
+                  "mean"
+                ],
+                "operation": "aggregate"
+              },
+              "actortype": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "messagetype": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "10s",
@@ -1232,5 +1314,5 @@
   "timezone": "",
   "title": "Akka.NET Cluster Metrics",
   "uid": "8Y4JcEfGk",
-  "version": 7
+  "version": 8
 }
