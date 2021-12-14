@@ -1593,12 +1593,6 @@
           "groupBy": [
             {
               "params": [
-                "5m"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
                 "actortype"
               ],
               "type": "tag"
@@ -1608,8 +1602,6 @@
           "measurement": "akka.net__akka.actor.created",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT count(\"value\") AS \"Created\" FROM \"akka.net__akka.actor.created\" WHERE (\"akka_address\" =~ /^$address$/ AND \"cluster_role\" =~ /^$role$/) GROUP BY time(5m), \"actortype\" LIMIT 10",
-          "rawQuery": false,
           "refId": "A",
           "resultFormat": "table",
           "select": [
@@ -1622,7 +1614,7 @@
               },
               {
                 "params": [],
-                "type": "count"
+                "type": "mean"
               },
               {
                 "params": [
@@ -1650,12 +1642,6 @@
           "groupBy": [
             {
               "params": [
-                "5m"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
                 "actortype"
               ],
               "type": "tag"
@@ -1677,7 +1663,7 @@
               },
               {
                 "params": [],
-                "type": "count"
+                "type": "mean"
               },
               {
                 "params": [
