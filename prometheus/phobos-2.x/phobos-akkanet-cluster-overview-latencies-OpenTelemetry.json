@@ -17,7 +17,7 @@
   "gnetId": 15638,
   "graphTooltip": 0,
   "id": 4,
-  "iteration": 1643796207797,
+  "iteration": 1643802098235,
   "links": [],
   "panels": [
     {
@@ -134,7 +134,7 @@
       "pluginVersion": "7.3.7",
       "targets": [
         {
-          "expr": "sum(akka_actor_mailbox_depth_msgs_bucket{actortype=~\"$actortype\"}) by (le)",
+          "expr": "sum(increase(akka_actor_mailbox_depth_msgs_bucket{actortype=~\"$actortype\"}[$__rate_interval])) by (le)",
           "format": "heatmap",
           "interval": "",
           "legendFormat": "{{le}}",
@@ -156,7 +156,7 @@
         "colorScale": "sqrt",
         "colorScheme": "interpolateBlues",
         "exponent": 0.5,
-        "mode": "spectrum"
+        "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
       "datasource": null,
@@ -184,7 +184,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum(increase(akka_actor_mailbox_depth_msgs_bucket{actortype=~\"$actortype\"}[$__interval])) by (le)",
+          "expr": "sum(increase(akka_actor_mailbox_depth_msgs_bucket{actortype=~\"$actortype\"}[$__rate_interval])) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -286,7 +286,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\"}[$__interval])) by (le)",
+          "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\"}[$__rate_interval])) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -446,7 +446,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}[$__interval])) by (le)",
+          "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}[$__rate_interval])) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -610,5 +610,5 @@
   "timezone": "",
   "title": "Akka.NET Cluster + Phobos 2.x Message Latency Metrics (Prometheus Data Source)",
   "uid": "-MOG0hx7z",
-  "version": 5
+  "version": 6
 }
