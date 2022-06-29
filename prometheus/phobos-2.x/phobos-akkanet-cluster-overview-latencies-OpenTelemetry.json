@@ -1,17 +1,50 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.2.6"
+    },
+    {
+      "type": "panel",
+      "id": "heatmap",
+      "name": "Heatmap",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    }
+  ],
   "annotations": {
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "type": "dashboard"
+        "type": "dashboard",
+        "datasource": "${DS_PROMETHEUS}"
       }
     ]
   },
@@ -20,15 +53,17 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 15638,
   "graphTooltip": 0,
-  "iteration": 1656517433472,
+  "id": null,
+  "iteration": 1656518812833,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
       },
       "gridPos": {
         "h": 1,
@@ -38,20 +73,14 @@
       },
       "id": 7,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "[$msgtype] Cumulative Latencies",
       "type": "row"
     },
     {
-      "cards": {},
+      "cards": {
+        "cardPadding": null,
+        "cardRound": null
+      },
       "color": {
         "cardColor": "#b4ff00",
         "colorScale": "sqrt",
@@ -60,10 +89,7 @@
         "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Heatmap of milliseconds of latency by $msgtype",
       "gridPos": {
         "h": 8,
@@ -83,10 +109,6 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
           "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\"}[$__interval])) by (le)",
           "format": "heatmap",
           "instant": false,
@@ -95,6 +117,8 @@
           "refId": "A"
         }
       ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "Latency Over Time [$msgtype ]",
       "tooltip": {
         "show": true,
@@ -104,18 +128,23 @@
       "xAxis": {
         "show": true
       },
+      "xBucketNumber": null,
+      "xBucketSize": null,
       "yAxis": {
+        "decimals": null,
         "format": "short",
         "logBase": 1,
-        "show": true
+        "max": null,
+        "min": null,
+        "show": true,
+        "splitFactor": null
       },
-      "yBucketBound": "auto"
+      "yBucketBound": "auto",
+      "yBucketNumber": null,
+      "yBucketSize": null
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Heatmap of milliseconds of latency by $msgtype",
       "fieldConfig": {
         "defaults": {
@@ -146,8 +175,6 @@
       "maxDataPoints": 25,
       "options": {
         "displayMode": "gradient",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -156,15 +183,12 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "text": {}
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "8.2.6",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
           "expr": "sum(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\"}) by (le)",
           "format": "heatmap",
           "instant": false,
@@ -173,14 +197,17 @@
           "refId": "A"
         }
       ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "Latency Distribution [$msgtype ]",
       "type": "bargauge"
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
       },
       "gridPos": {
         "h": 1,
@@ -190,20 +217,14 @@
       },
       "id": 5,
       "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "[$msgtype] Latencies When Processed by [$actortype]",
       "type": "row"
     },
     {
-      "cards": {},
+      "cards": {
+        "cardPadding": null,
+        "cardRound": null
+      },
       "color": {
         "cardColor": "#b4ff00",
         "colorScale": "sqrt",
@@ -212,10 +233,7 @@
         "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Heatmap of milliseconds of latency by $actortype / $msgtype",
       "gridPos": {
         "h": 8,
@@ -235,10 +253,6 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
           "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}[$__interval])) by (le)",
           "format": "heatmap",
           "instant": false,
@@ -247,6 +261,8 @@
           "refId": "A"
         }
       ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "Latency Over Time [$actortype / $msgtype ]",
       "tooltip": {
         "show": true,
@@ -256,18 +272,23 @@
       "xAxis": {
         "show": true
       },
+      "xBucketNumber": null,
+      "xBucketSize": null,
       "yAxis": {
+        "decimals": null,
         "format": "short",
         "logBase": 1,
-        "show": true
+        "max": null,
+        "min": null,
+        "show": true,
+        "splitFactor": null
       },
-      "yBucketBound": "auto"
+      "yBucketBound": "auto",
+      "yBucketNumber": null,
+      "yBucketSize": null
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Heatmap of milliseconds of latency by $actortype / $msgtype",
       "fieldConfig": {
         "defaults": {
@@ -298,8 +319,6 @@
       "maxDataPoints": 25,
       "options": {
         "displayMode": "gradient",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -308,15 +327,12 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "text": {}
       },
-      "pluginVersion": "9.0.1",
+      "pluginVersion": "8.2.6",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
           "expr": "sum(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}) by (le)",
           "format": "heatmap",
           "instant": false,
@@ -325,27 +341,25 @@
           "refId": "A"
         }
       ],
+      "timeFrom": null,
+      "timeShift": null,
       "title": "Latency Distribution [$actortype / $msgtype ]",
       "type": "bargauge"
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 36,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "int",
-          "value": "int"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(messagetype)",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "msgtype",
@@ -366,16 +380,12 @@
         "useTags": false
       },
       {
-        "current": {
-          "selected": false,
-          "text": "Petabridge.Cmd.Remote.Actors.GlobalStatusActor",
-          "value": "Petabridge.Cmd.Remote.Actors.GlobalStatusActor"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "P1809F7CD0C75ACF3"
-        },
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(actortype)",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "actortype",
@@ -405,6 +415,5 @@
   "timezone": "",
   "title": "Akka.NET Cluster + Phobos 2.x Message Latency Metrics (Prometheus Data Source)",
   "uid": "-MOG0hx7z",
-  "version": 1,
-  "weekStart": ""
+  "version": 1
 }
