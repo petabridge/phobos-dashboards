@@ -1,9 +1,63 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.2.6"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph (old)",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table-old",
+      "name": "Table (old)",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
         "builtIn": 1,
-        "datasource": "prometheus",
+        "datasource": "${DS_PROMETHEUS}",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -17,13 +71,14 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 15637,
   "graphTooltip": 0,
-  "iteration": 1673355323765,
+  "id": null,
+  "iteration": 1673355471097,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -36,7 +91,7 @@
       "type": "row"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Total number of active Akka.Cluster Members.",
       "fieldConfig": {
         "defaults": {
@@ -131,7 +186,7 @@
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "All nodes in the cluster that are detected to be unreachable.",
       "fieldConfig": {
         "defaults": {
@@ -194,7 +249,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Tracks all nodes by their membership status and reachability.",
       "fill": 1,
       "fillGradient": 0,
@@ -288,7 +343,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -305,7 +360,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Total aggregate logging activity per-second for each node in an Akka.NET cluster.",
       "fill": 1,
       "fillGradient": 0,
@@ -417,7 +472,7 @@
     },
     {
       "columns": [],
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Groups all exceptions detected in Akka.NET logs by type.",
       "fontSize": "100%",
       "gridPos": {
@@ -477,7 +532,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Total errors logged by Akka.NET over past 5 minutes, cumulative for all roles / cluster / exception types.",
       "fieldConfig": {
         "defaults": {
@@ -551,7 +606,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -569,7 +624,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "The full set of Akka.NET actors running on all nodes for all roles in a cluster.",
       "fill": 1,
       "fillGradient": 0,
@@ -665,7 +720,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Cumulative Akka.NET messaging throughput across all selected nodes and roles.",
       "fieldConfig": {
         "defaults": {
@@ -739,7 +794,7 @@
       "type": "stat"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "All actor counts by type.",
       "fieldConfig": {
         "defaults": {
@@ -827,7 +882,7 @@
       "type": "table"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Top 10 actor type / exception type pairs, based on the number of crashes per second observed over a 30 minute timespan.",
       "fieldConfig": {
         "defaults": {
@@ -880,7 +935,7 @@
       "type": "table"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Akka.NET message throughput by message type.",
       "fieldConfig": {
         "defaults": {
@@ -948,7 +1003,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Akka.NET message throughput by message type.",
       "fieldConfig": {
         "defaults": {
@@ -1147,25 +1202,13 @@
   "refresh": "10s",
   "schemaVersion": 32,
   "style": "dark",
-  "tags": [
-    "akka.net",
-    "phobos",
-    "phobos 2.1"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "prometheus",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(cluster_role)",
         "description": null,
         "error": null,
@@ -1190,16 +1233,8 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "prometheus",
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(akka_address)",
         "description": null,
         "error": null,
@@ -1224,12 +1259,8 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": null,
+        "current": {},
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(region)",
         "description": "All of the available shardRegions in the current Akka.NET cluster.",
         "error": null,
@@ -1292,7 +1323,7 @@
     ]
   },
   "timezone": "",
-  "title": "Akka.NET Cluster + Phobos 2.x Metrics (Prometheus Data Source) 2",
-  "uid": "fxcTFhb7z",
-  "version": 3
+  "title": "Akka.NET Cluster + Phobos 2.x Metrics (Prometheus Data Source)",
+  "uid": "fm-cB024k",
+  "version": 1
 }
