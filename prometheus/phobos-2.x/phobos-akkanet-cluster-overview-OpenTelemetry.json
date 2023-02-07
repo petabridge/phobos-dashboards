@@ -1266,7 +1266,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "The name of all shard regions detected inside the application.",
+        "label": "shardRegion",
         "multi": true,
         "name": "shardRegion",
         "options": [],
