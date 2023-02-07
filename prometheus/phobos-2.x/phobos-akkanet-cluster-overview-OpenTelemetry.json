@@ -72,7 +72,7 @@
   "gnetId": 15637,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1673355471097,
+  "iteration": 1675742649384,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1202,7 +1202,10 @@
   "refresh": "10s",
   "schemaVersion": 32,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "akka.net",
+    "phobos"
+  ],
   "templating": {
     "list": [
       {
@@ -1323,7 +1326,7 @@
     ]
   },
   "timezone": "",
-  "title": "Akka.NET Cluster + Phobos 2.x Metrics (Prometheus Data Source)",
+  "title": "Akka.NET Cluster + Phobos 2.1 Metrics (Prometheus Data Source)",
   "uid": "fm-cB024k",
-  "version": 1
+  "version": 2
 }
