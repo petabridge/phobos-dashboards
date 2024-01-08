@@ -163,6 +163,22 @@
               "visualization": "timechart"
             },
             "name": "mailbox_depth"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "customMetrics \r\n| where timestamp > ago(5m) and name == \"akka.actor.mailbox.depth\"\r\n| extend actortype = tostring(customDimensions[\"actortype\"])\r\n| where not(isempty(actortype))\r\n| summarize total=sum(value) by actortype\r\n| order by total desc\r\n| limit 10",
+              "size": 0,
+              "title": "Mailbox Depth Totals by Actor Type (Top 10 over 5 minutes)",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.insights/components",
+              "visualization": "table"
+            },
+            "name": "mailbox_depth_by_actor_type"
           }
         ]
       },
