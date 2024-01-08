@@ -147,6 +147,22 @@
               "visualization": "timechart"
             },
             "name": "msg_processed"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "customMetrics\r\n| where timestamp > ago(30m) and name contains \"akka.actor.mailbox.depth\"\r\n| summarize messages_processed_per_min = sum(value) by bin(timestamp, 1m)",
+              "size": 0,
+              "title": "Total Actor Mailbox Depth (msg/minute)",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "queryType": 0,
+              "resourceType": "microsoft.insights/components",
+              "visualization": "timechart"
+            },
+            "name": "mailbox_depth"
           }
         ]
       },
