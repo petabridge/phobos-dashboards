@@ -39,12 +39,12 @@
     "list": [
       {
         "builtIn": 1,
+        "datasource": "${DS_PROMETHEUS}",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "type": "dashboard",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "dashboard"
       }
     ]
   },
@@ -54,17 +54,13 @@
   "gnetId": 15638,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1656518812833,
+  "iteration": 1710430223367,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
       "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -109,7 +105,8 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\"}[$__interval])) by (le)",
+          "exemplar": true,
+          "expr": "sum(increase(akka_messages_latency_milliseconds_bucket{messagetype=~\"$msgtype\"}[$__interval])) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -189,7 +186,8 @@
       "pluginVersion": "8.2.6",
       "targets": [
         {
-          "expr": "sum(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\"}) by (le)",
+          "exemplar": true,
+          "expr": "sum(akka_messages_latency_milliseconds_bucket{messagetype=~\"$msgtype\"}) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -205,10 +203,6 @@
     {
       "collapsed": false,
       "datasource": "${DS_PROMETHEUS}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -253,7 +247,8 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum(increase(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}[$__interval])) by (le)",
+          "exemplar": true,
+          "expr": "sum(increase(akka_messages_latency_milliseconds_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}[$__interval])) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -333,7 +328,8 @@
       "pluginVersion": "8.2.6",
       "targets": [
         {
-          "expr": "sum(akka_messages_latency_ms_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}) by (le)",
+          "exemplar": true,
+          "expr": "sum(akka_messages_latency_milliseconds_bucket{messagetype=~\"$msgtype\",actortype=~\"$actortype\"}) by (le)",
           "format": "heatmap",
           "instant": false,
           "interval": "",
@@ -413,7 +409,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Akka.NET Cluster + Phobos 2.x Message Latency Metrics (Prometheus Data Source)",
+  "title": "Akka.NET Cluster + Phobos 2.1 Message Latency Metrics (Prometheus Data Source)",
   "uid": "-MOG0hx7z",
   "version": 1
 }
