@@ -629,7 +629,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -732,7 +733,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -865,7 +867,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -987,7 +990,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1063,7 +1067,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1145,7 +1150,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1248,7 +1254,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1310,7 +1317,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1355,8 +1363,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[5m])))",
+          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -1368,8 +1377,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[1m]))",
+          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range]))",
           "hide": true,
           "instant": false,
           "interval": "",
@@ -1393,7 +1403,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1438,8 +1449,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[5m])))",
+          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -1448,7 +1460,7 @@
           "refId": "A"
         }
       ],
-      "title": "Akka.NET Message Totals by Type  (Top 10 over 5 minutes)",
+      "title": "Akka.NET Message Totals by Type  (Top 10)",
       "type": "bargauge"
     },
     {
@@ -1461,7 +1473,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 67
+        "y": 277
       },
       "id": 38,
       "panels": [],
@@ -1494,7 +1506,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1509,7 +1522,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 68
+        "y": 278
       },
       "id": 56,
       "options": {
@@ -1566,7 +1579,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1581,7 +1595,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 68
+        "y": 278
       },
       "id": 57,
       "options": {
@@ -1725,7 +1739,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timeRangeUpdatedDuringEditOrView": false,
