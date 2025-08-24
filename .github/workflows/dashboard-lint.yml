@@ -1,0 +1,144 @@
+name: Lint Grafana Dashboards
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  issues: write    # Required to create issues
+  pull-requests: write  # Required to comment on PRs
+
+jobs:
+  lint-dashboards:
+    name: Lint Grafana Dashboards
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'  # Using a recent stable version of Go
+
+      # Get the dashboard-linter version we want to use
+      - name: Get dashboard-linter version
+        id: linter-version
+        run: |
+          LINTER_VERSION="latest"  # We could make this configurable in the future
+          echo "LINTER_VERSION=$LINTER_VERSION" >> $GITHUB_ENV
+
+      - name: Cache Go modules and binaries
+        id: go-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+            ~/go/bin
+          key: ${{ runner.os }}-go-dashboard-linter-${{ env.LINTER_VERSION }}
+
+      - name: Install Grafana Dashboard Linter
+        if: steps.go-cache.outputs.cache-hit != 'true'
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          go install github.com/grafana/dashboard-linter@latest
+
+      - name: Add Go bin to PATH
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Find all dashboard JSON files
+        id: find-dashboards
+        run: |
+          # Find all JSON files in prometheus/phobos-2.x directory
+          DASHBOARDS=$(find prometheus/phobos-2.x -name "*.json" -type f | tr '\n' ' ')
+          echo "Found dashboards: $DASHBOARDS"
+          echo "DASHBOARDS=$DASHBOARDS" >> $GITHUB_ENV
+          
+          # Also check if we have dashboards in the new structure (for future)
+          if [ -d "dashboards" ]; then
+            NEW_DASHBOARDS=$(find dashboards -name "*.json" -type f | tr '\n' ' ')
+            if [ ! -z "$NEW_DASHBOARDS" ]; then
+              DASHBOARDS="$DASHBOARDS $NEW_DASHBOARDS"
+              echo "DASHBOARDS=$DASHBOARDS" >> $GITHUB_ENV
+            fi
+          fi
+
+      - name: Lint Phobos Dashboards
+        id: lint-all
+        if: env.DASHBOARDS != ''
+        continue-on-error: true 
+        run: |
+          echo "Running dashboard lint on all Phobos 2.x dashboards..."
+          OVERALL_EXIT_CODE=0
+          LINT_RESULTS=""
+          
+          for dashboard in $DASHBOARDS; do
+            echo "Linting $dashboard..."
+            # Run linter and capture both output and exit code
+            OUTPUT=$(dashboard-linter lint --strict "$dashboard" 2>&1) || EXIT_CODE=$?
+            EXIT_CODE=${EXIT_CODE:-0}
+            
+            if [ "$EXIT_CODE" != "0" ]; then
+              OVERALL_EXIT_CODE=1
+              LINT_RESULTS="${LINT_RESULTS}### ❌ $dashboard\n\`\`\`\n${OUTPUT}\n\`\`\`\n\n"
+            else
+              LINT_RESULTS="${LINT_RESULTS}### ✅ $dashboard\n\`\`\`\n${OUTPUT}\n\`\`\`\n\n"
+            fi
+            
+            echo "$OUTPUT"
+            echo "---"
+          done
+          
+          # Store results for issue creation
+          echo "LINT_RESULTS<<EOF" >> $GITHUB_ENV
+          echo -e "$LINT_RESULTS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "OVERALL_EXIT_CODE=$OVERALL_EXIT_CODE" >> $GITHUB_ENV
+          
+          # Exit with overall status
+          exit $OVERALL_EXIT_CODE
+
+      - name: Lint Status Summary
+        if: always()
+        run: |
+          echo "=== Lint Status Summary ==="
+          if [ "$OVERALL_EXIT_CODE" != "0" ]; then
+            echo "❌ Linting issues found in one or more dashboards"
+            exit 1
+          else
+            echo "✅ All dashboards passed linting"
+          fi
+
+      - name: Create Issue on Lint Failure
+        if: github.event_name == 'push' && failure()  # Only create issues on push events that fail
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const lintResults = process.env.LINT_RESULTS || 'No lint results available'
+            
+            const title = '🚨 Phobos Dashboard Linting Issues Detected'
+            const body = `## Grafana Dashboard Lint Results 📊
+
+            ${lintResults}
+
+            This issue was automatically created because linting issues were detected after changes were merged to master.
+
+            Please review and fix these issues to maintain dashboard quality standards.
+
+            Linting powered by [grafana/dashboard-linter](https://github.com/grafana/dashboard-linter) 🔍`
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['dashboard', 'linting', 'phobos']
+            })
