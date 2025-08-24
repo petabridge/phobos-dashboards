@@ -1,0 +1,83 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Prepare Release Assets
+        run: |
+          # Create directories for release assets
+          mkdir -p release-assets/phobos-2.x
+          
+          # Copy current Phobos 2.x dashboards
+          if [ -d "prometheus/phobos-2.x" ]; then
+            cp prometheus/phobos-2.x/*.json release-assets/phobos-2.x/ 2>/dev/null || true
+          fi
+          
+          # If we have the new structure, copy from there too
+          if [ -d "dashboards" ]; then
+            cp dashboards/*.json release-assets/phobos-2.x/ 2>/dev/null || true
+          fi
+          
+          # Create a zip of the dashboards
+          cd release-assets
+          zip -r phobos-dashboards-${{ github.ref_name }}.zip phobos-2.x/
+          cd ..
+          
+          # If this is a legacy release tag, also package the archive
+          if [[ "${{ github.ref_name }}" == *"legacy"* ]]; then
+            if [ -d "archive/phobos-1.x" ]; then
+              cd archive
+              zip -r ../release-assets/phobos-1.x-legacy-dashboards.zip phobos-1.x/
+              cd ..
+            fi
+          fi
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') || contains(github.ref_name, 'rc') }}
+
+      - name: Upload Dashboard JSON Files
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          repo-token: ${{ github.token }}
+          release-tag: ${{ github.ref_name }}
+          files: 'release-assets/phobos-2.x/*.json'
+
+      - name: Upload Dashboard ZIP
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release-assets/phobos-dashboards-${{ github.ref_name }}.zip
+          asset_name: phobos-dashboards-${{ github.ref_name }}.zip
+          asset_content_type: application/zip
+
+      - name: Upload Legacy Archive (if applicable)
+        if: contains(github.ref_name, 'legacy')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release-assets/phobos-1.x-legacy-dashboards.zip
+          asset_name: phobos-1.x-legacy-dashboards.zip
+          asset_content_type: application/zip
