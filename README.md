@@ -55,9 +55,9 @@ We welcome contributions! Please ensure:
 
 ## 📦 Other Monitoring Solutions
 
-While this repository focuses on Prometheus/Grafana dashboards, Phobos also supports:
-- **Azure Application Insights** - See [AppInsights OpenTelemetry dashboard](appinsights/phobos-2.x/)
-- **DataDog** - See [DataDog dashboards](datadog/phobos-2.x/)
+This repository also includes Phobos 2.x dashboards for:
+- **Azure Application Insights** - OpenTelemetry-based workbooks in [`/integrations/appinsights`](integrations/appinsights/)
+- **DataDog** - Native DataDog dashboards in [`/integrations/datadog`](integrations/datadog/)
 
 ## 📄 License
 

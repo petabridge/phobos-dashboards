@@ -12,9 +12,12 @@
 #### 🎯 Focus on Phobos 2.x OpenTelemetry Dashboards
 - Repository now exclusively maintains Phobos 2.x OpenTelemetry-based dashboards
 - Simplified structure with clear focus on modern observability standards
-- Two primary dashboards:
+- Primary Prometheus/Grafana dashboards:
   - **Cluster Overview**: Complete view of Akka.NET cluster health and metrics
   - **Cluster Latencies**: Detailed latency analysis and percentile tracking
+- Additional integrations maintained:
+  - **DataDog**: Native Phobos 2.x dashboards for DataDog
+  - **Azure Application Insights**: OpenTelemetry-based workbooks
 
 #### 🔧 CI/CD Implementation
 - Added GitHub Actions workflow for dashboard validation using Grafana's dashboard-linter
