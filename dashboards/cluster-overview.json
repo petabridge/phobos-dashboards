@@ -157,7 +157,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_members{status=\"Up\"}))",
+          "expr": "ceil(avg(akka_cluster_members{status=\"Up\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "Up",
@@ -170,7 +170,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_members{status=\"WeaklyUp\"}))",
+          "expr": "ceil(avg(akka_cluster_members{status=\"WeaklyUp\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "WeaklyUp",
@@ -183,7 +183,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_members{status=\"Joining\"}))",
+          "expr": "ceil(avg(akka_cluster_members{status=\"Joining\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "Joining",
@@ -196,7 +196,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_members{status=\"Leaving\"}))",
+          "expr": "ceil(avg(akka_cluster_members{status=\"Leaving\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "Leaving",
@@ -209,7 +209,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_members{status=\"Exiting\"}))",
+          "expr": "ceil(avg(akka_cluster_members{status=\"Exiting\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "Exiting",
@@ -222,7 +222,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_members{status=\"Down\"}))",
+          "expr": "ceil(avg(akka_cluster_members{status=\"Down\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "Down",
@@ -290,7 +290,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_reachable_members{status=\"False\"}))",
+          "expr": "ceil(avg(akka_cluster_reachable_members{status=\"False\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -388,10 +388,12 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg by(status)(akka_cluster_members))",
+          "expr": "ceil(avg by(status)(akka_cluster_members{job=~\"$job\", instance=~\"$instance\"}))",
           "interval": "",
           "legendFormat": "{{status}}",
+          "range": true,
           "refId": "A"
         },
         {
@@ -399,8 +401,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "ceil(avg(akka_cluster_reachable_members{status=\"False\"}))",
+          "expr": "ceil(avg(akka_cluster_reachable_members{status=\"False\",job=~\"$job\", instance=~\"$instance\"}))",
           "instant": false,
           "interval": "",
           "legendFormat": "Unreachable",
@@ -409,6 +412,197 @@
       ],
       "title": "Cluster Nodes by Status",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Status of all Akka.NET applications in the current job / instance. Current up to the minute.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 153,
+      "options": {
+        "cellHeight": "lg",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "status"
+          }
+        ]
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max by (instance,akka_address, cluster_role, service_version, status) (\n  max_over_time(akka_cluster_members{job=~\"$job\",instance=~\"$instance\",status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[5m])\n) > 0",
+          "format": "table",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "{{instance}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(\r\n  sum by (instance) (\r\n    akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"}\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__range])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{level=\"error\", job=~\"$job\", instance=~\"$instance\"}[$__range])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Akka.NET Instances",
+      "transformations": [
+        {
+          "filter": {
+            "id": "byRefId",
+            "options": ""
+          },
+          "id": "timeSeriesTable",
+          "options": {
+            "A": {
+              "stat": "lastNotNull"
+            },
+            "B": {
+              "stat": "last",
+              "timeField": "Time"
+            },
+            "C": {
+              "stat": "last",
+              "timeField": "Time"
+            },
+            "D": {
+              "stat": "last",
+              "timeField": "Time"
+            },
+            "E": {
+              "stat": "last",
+              "timeField": "Time"
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "instance",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Trend #B": "Actors",
+              "Trend #C": "Msg / s",
+              "Trend #D": "Logs / s",
+              "Trend #E": "Errors / s"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "collapsed": false,
@@ -420,7 +614,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 25
       },
       "id": 8,
       "panels": [],
@@ -433,7 +627,7 @@
           "refId": "A"
         }
       ],
-      "title": "Logging and Error Rates",
+      "title": "Logging and Error Rates [$job]",
       "type": "row"
     },
     {
@@ -570,7 +764,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 26
       },
       "id": 6,
       "options": {
@@ -595,7 +789,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(level)(ceil(irate(akka_logs_events_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "sum by(level)(ceil(irate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -666,7 +860,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 23
+        "y": 34
       },
       "id": 10,
       "options": {
@@ -690,21 +884,27 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(cluster_role,akka_address,exceptiontype)(ceil(increase(akka_logs_events_total{cluster_role=~\"$role\",akka_address=~\"$address\",exceptiontype=~\".+\"}[$__range])))",
+          "expr": "sum by(job, instance, akka_address, exceptiontype)(ceil(increase(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\",exceptiontype=~\".+\"}[$__range])))",
           "format": "table",
           "instant": true,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "",
+          "legendFormat": "{{label_name}}",
           "refId": "A"
         }
       ],
       "title": "Exceptions by Type",
       "transformations": [
         {
-          "id": "merge",
+          "id": "sortBy",
           "options": {
-            "reducers": []
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Value"
+              }
+            ]
           }
         }
       ],
@@ -750,7 +950,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 23
+        "y": 34
       },
       "id": 12,
       "maxDataPoints": 100,
@@ -780,7 +980,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(floor(increase(akka_logs_events_total{level=\"error\",cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "sum(floor(increase(akka_logs_events_total{level=\"error\",job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -802,11 +1002,10 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 43
       },
       "id": 2,
       "panels": [],
-      "repeat": "role",
       "targets": [
         {
           "datasource": {
@@ -816,7 +1015,7 @@
           "refId": "A"
         }
       ],
-      "title": "Actor Metrics [$role]",
+      "title": "Actor Metrics [$job]",
       "type": "row"
     },
     {
@@ -883,7 +1082,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 44
       },
       "id": 151,
       "options": {
@@ -906,7 +1105,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(ceil(irate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "sum(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "instant": false,
           "legendFormat": "processed msgs / second",
           "range": true,
@@ -918,7 +1117,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(ceil(irate(akka_messages_deadletters_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "sum(ceil(irate(akka_messages_deadletters_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "hide": false,
           "instant": false,
           "legendFormat": "deadletters / second",
@@ -931,7 +1130,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(ceil(irate(akka_messages_unhandled_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "sum(ceil(irate(akka_messages_unhandled_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "hide": false,
           "instant": false,
           "legendFormat": "unhandled msgs / second",
@@ -1007,7 +1206,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 51
       },
       "id": 4,
       "options": {
@@ -1031,13 +1230,14 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(cluster_role,akka_address)(akka_actor_live_actors{cluster_role=~\"$role\",akka_address=~\"$address\"})",
+          "expr": "sum by(cluster_role,instance,akka_address)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Total Actors [{{cluster_role}} ({{akka_address}})]",
+          "legendFormat": "Total Actors [{{instance}} ({{akka_address}})]",
           "refId": "A"
         }
       ],
@@ -1084,7 +1284,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 51
       },
       "id": 16,
       "maxDataPoints": 100,
@@ -1114,7 +1314,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(ceil(irate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "sum(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1166,7 +1366,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 49
+        "y": 60
       },
       "id": 14,
       "options": {
@@ -1188,8 +1388,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(actortype)(akka_actor_live_actors{cluster_role=~\"$role\",akka_address=~\"$address\"}))",
+          "expr": "topk(10,sum by(actortype)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"}))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1270,7 +1471,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 49
+        "y": 60
       },
       "id": 20,
       "options": {
@@ -1292,8 +1493,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total[30m])))",
+          "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total{job=~\"$job\", instance=~\"$instance\"}[30m])))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1334,7 +1536,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 58
+        "y": 69
       },
       "id": 18,
       "options": {
@@ -1365,7 +1567,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -1379,7 +1581,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range]))",
+          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
           "hide": true,
           "instant": false,
           "interval": "",
@@ -1420,7 +1622,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 58
+        "y": 69
       },
       "id": 21,
       "options": {
@@ -1451,7 +1653,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{cluster_role=~\"$role\",akka_address=~\"$address\"}[$__range])))",
+          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -1473,7 +1675,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 277
+        "y": 78
       },
       "id": 38,
       "panels": [],
@@ -1522,7 +1724,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 278
+        "y": 79
       },
       "id": 56,
       "options": {
@@ -1551,8 +1753,9 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(akka_address)(akka_cluster_sharding_shards{region=~\"$shardRegion\"})",
+          "expr": "sum by(instance)(akka_cluster_sharding_shards{region=~\"$shardRegion\",job=~\"$job\", instance=~\"$instance\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1595,7 +1798,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 278
+        "y": 79
       },
       "id": 57,
       "options": {
@@ -1624,12 +1827,13 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(akka_address)(akka_cluster_sharding_entities{region=~\"$shardRegion\"})",
+          "expr": "sum by(instance)(akka_cluster_sharding_entities{region=~\"$shardRegion\",job=~\"$job\", instance=~\"$instance\"})",
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "{{akka_address}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1646,66 +1850,13 @@
   "templating": {
     "list": [
       {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "label_values(cluster_role)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Role",
-        "multi": true,
-        "name": "role",
-        "options": [],
-        "query": {
-          "query": "label_values(cluster_role)",
-          "refId": "prometheus-role-Variable-Query"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
         "allValue": ".*",
         "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values(akka_cluster_members{cluster_role=~\"$role\"},akka_address)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "address",
-        "multi": true,
-        "name": "address",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(akka_cluster_members{cluster_role=~\"$role\"},akka_address)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
-        "definition": "label_values(akka_cluster_sharding_shards{akka_address=~\"$address\", cluster_role=~\"$role\"},region)",
+        "definition": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
         "description": "All of the available shardRegions in the current Akka.NET cluster.",
         "hide": 0,
         "includeAll": true,
@@ -1715,7 +1866,59 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(akka_cluster_sharding_shards{akka_address=~\"$address\", cluster_role=~\"$role\"},region)",
+          "query": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(akka_actor_live_actors,job)",
+        "description": "The name of the OTEL workload.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(akka_actor_live_actors,job)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(akka_actor_live_actors{job=~\"$job\"},instance)",
+        "description": "Single instance of a particular job.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(akka_actor_live_actors{job=~\"$job\"},instance)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -1769,8 +1972,8 @@
     ]
   },
   "timezone": "",
-  "title": "Akka.NET Cluster + Phobos 2.5 Metrics",
-  "uid": "fm-cB024k",
-  "version": 14,
+  "title": "Akka.NET Cluster + Phobos Metrics",
+  "uid": "fm-cB0241",
+  "version": 30,
   "weekStart": ""
 }
