@@ -484,7 +484,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max by (instance,akka_address, cluster_role, service_version, status) (\n  max_over_time(akka_cluster_members{job=~\"$job\",instance=~\"$instance\",status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[5m])\n) > 0",
+          "expr": "(\n  max by (instance, akka_address, cluster_role, service_version, status) (\n    max_over_time(\n      akka_cluster_members{\n        job=~\"$job\",\n        instance=~\"$instance\",\n        status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"\n      }[5m]\n    )\n  ) > 0\n)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1064,7 +1064,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1186,7 +1187,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1263,7 +1265,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1957,7 +1960,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timeRangeUpdatedDuringEditOrView": false,
@@ -1989,6 +1992,6 @@
   "timezone": "",
   "title": "Akka.NET Cluster + Phobos Metrics",
   "uid": "fm-cB0241",
-  "version": 43,
+  "version": 47,
   "weekStart": ""
 }
