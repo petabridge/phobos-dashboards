@@ -605,7 +605,7 @@
       "type": "table"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "datasource": {
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
@@ -617,7 +617,367 @@
         "y": 25
       },
       "id": 8,
-      "panels": [],
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "description": "Total aggregate logging activity per-second for each node in an Akka.NET cluster.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "error"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#F2495C",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.fillOpacity",
+                    "value": 10
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "warning"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#FA6400",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.fillOpacity",
+                    "value": 20
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "info"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#73BF69",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "debug"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#C8F2C2",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 10
+          },
+          "id": 6,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true
+            },
+            "tooltip": {
+              "maxHeight": 600,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.2.6",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "sum by(level)(ceil(irate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{level}} / s",
+              "refId": "A"
+            }
+          ],
+          "title": "Cluster Logging Activity",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "description": "Groups all exceptions detected in Akka.NET logs by type.",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "inspect": false
+              },
+              "decimals": 2,
+              "displayName": "",
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Time"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Time"
+                  },
+                  {
+                    "id": "custom.hidden",
+                    "value": true
+                  },
+                  {
+                    "id": "custom.align"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 18
+          },
+          "id": 10,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "11.0.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "sum by(job, instance, akka_address, exceptiontype)(ceil(increase(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\",exceptiontype=~\".+\"}[$__range])))",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{label_name}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Exceptions by Type",
+          "transformations": [
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "Value"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "description": "Total errors logged by Akka.NET over the time window.",
+          "fieldConfig": {
+            "defaults": {
+              "mappings": [
+                {
+                  "options": {
+                    "match": "null",
+                    "result": {
+                      "text": "N/A"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 18
+          },
+          "id": 12,
+          "maxDataPoints": 100,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": false,
+            "text": {},
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "11.0.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${DS_PROMETHEUS}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "sum(floor(increase(akka_logs_events_total{level=\"error\",job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "",
+              "refId": "A"
+            }
+          ],
+          "title": "Total Errors Logged",
+          "type": "stat"
+        }
+      ],
       "targets": [
         {
           "datasource": {
@@ -631,368 +991,6 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Total aggregate logging activity per-second for each node in an Akka.NET cluster.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "error"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#F2495C",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.fillOpacity",
-                "value": 10
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "warning"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#FA6400",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.fillOpacity",
-                "value": 20
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "info"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73BF69",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "debug"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#C8F2C2",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 26
-      },
-      "id": 6,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "maxHeight": 600,
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.2.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "sum by(level)(ceil(irate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{level}} / s",
-          "refId": "A"
-        }
-      ],
-      "title": "Cluster Logging Activity",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Groups all exceptions detected in Akka.NET logs by type.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "decimals": 2,
-          "displayName": "",
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Time"
-              },
-              {
-                "id": "custom.hidden",
-                "value": true
-              },
-              {
-                "id": "custom.align"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 34
-      },
-      "id": 10,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
-      },
-      "pluginVersion": "11.0.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "sum by(job, instance, akka_address, exceptiontype)(ceil(increase(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\",exceptiontype=~\".+\"}[$__range])))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{label_name}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Exceptions by Type",
-      "transformations": [
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [
-              {
-                "desc": true,
-                "field": "Value"
-              }
-            ]
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Total errors logged by Akka.NET over the time window.",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 34
-      },
-      "id": 12,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "text": {},
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.0.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "sum(floor(increase(akka_logs_events_total{level=\"error\",job=~\"$job\", instance=~\"$instance\"}[$__range])))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total Errors Logged",
-      "type": "stat"
-    },
-    {
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
@@ -1002,7 +1000,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 26
       },
       "id": 2,
       "panels": [],
@@ -1066,8 +1064,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1082,7 +1079,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 27
       },
       "id": 151,
       "options": {
@@ -1105,9 +1102,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "sum by (actor_category)(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "instant": false,
-          "legendFormat": "processed msgs / second",
+          "legendFormat": "{{actor_category}} msgs / second",
           "range": true,
           "refId": "A"
         },
@@ -1120,7 +1117,7 @@
           "expr": "sum(ceil(irate(akka_messages_deadletters_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "hide": false,
           "instant": false,
-          "legendFormat": "deadletters / second",
+          "legendFormat": "{{actor_category}} deadletters / second",
           "range": true,
           "refId": "B"
         },
@@ -1189,8 +1186,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1206,7 +1202,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 51
+        "y": 34
       },
       "id": 4,
       "options": {
@@ -1232,12 +1228,12 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(cluster_role,instance,akka_address)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"})",
+          "expr": "sum by(instance,akka_address,actor_category)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Total Actors [{{instance}} ({{akka_address}})]",
+          "legendFormat": "Total Actors [{{instance}} ({{actor_category}})]",
           "refId": "A"
         }
       ],
@@ -1267,8 +1263,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1284,7 +1279,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 51
+        "y": 34
       },
       "id": 16,
       "maxDataPoints": 100,
@@ -1314,12 +1309,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "sum by (actor_category)(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "",
+          "legendFormat": "{{actor_categry}}",
           "range": true,
           "refId": "A"
         }
@@ -1350,8 +1345,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1366,7 +1360,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 60
+        "y": 43
       },
       "id": 14,
       "options": {
@@ -1390,7 +1384,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(actortype)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"}))",
+          "expr": "topk(10,sum by(actortype)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1439,78 +1433,6 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
-      "description": "Top 10 actor type / exception type pairs, based on the number of crashes per second observed over a 30 minute timespan.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "filterable": false,
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 60
-      },
-      "id": 20,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
-      },
-      "pluginVersion": "11.0.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total{job=~\"$job\", instance=~\"$instance\"}[30m])))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{actortype}},{{exceptiontype}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Actor Crashes by Actor / Exception (Top 10)",
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
       "description": "Akka.NET message throughput by message type.",
       "fieldConfig": {
         "defaults": {
@@ -1519,94 +1441,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 69
-      },
-      "id": 18,
-      "options": {
-        "displayMode": "gradient",
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "text": {},
-        "valueMode": "color"
-      },
-      "pluginVersion": "11.0.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{messagetype}}",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range]))",
-          "hide": true,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{messagetype}}",
-          "refId": "B"
-        }
-      ],
-      "title": "Akka.NET Message Throughput by Type  (Top 10)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "description": "Akka.NET message throughput by message type.",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1622,7 +1457,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 69
+        "y": 43
       },
       "id": 21,
       "options": {
@@ -1653,7 +1488,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range])))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -1666,6 +1501,162 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Akka.NET message throughput by message type.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 52
+      },
+      "id": 18,
+      "options": {
+        "displayMode": "gradient",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "text": {},
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range])))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{messagetype}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range]))",
+          "hide": true,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{messagetype}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Akka.NET Message Throughput by Type  (Top 10)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "description": "Top 10 actor type / exception type pairs, based on the number of crashes per second observed over a 30 minute timespan.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 52
+      },
+      "id": 20,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range])))",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{actortype}},{{exceptiontype}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Actor Crashes by Actor / Exception (Top 10)",
+      "type": "table"
+    },
+    {
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
@@ -1675,7 +1666,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 78
+        "y": 61
       },
       "id": 38,
       "panels": [],
@@ -1708,8 +1699,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1724,7 +1714,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 79
+        "y": 62
       },
       "id": 56,
       "options": {
@@ -1782,8 +1772,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1798,7 +1787,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 79
+        "y": 62
       },
       "id": 57,
       "options": {
@@ -1856,32 +1845,6 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
-        "description": "All of the available shardRegions in the current Akka.NET cluster.",
-        "hide": 0,
-        "includeAll": true,
-        "label": "shardRegion",
-        "multi": true,
-        "name": "shardRegion",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
-          "refId": "PrometheusVariableQueryEditor-VariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "current": {},
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
-        },
         "definition": "label_values(akka_actor_live_actors,job)",
         "description": "The name of the OTEL workload.",
         "hide": 0,
@@ -1925,6 +1888,58 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
+        "description": "All of the available shardRegions in the current Akka.NET cluster.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "shardRegion",
+        "multi": true,
+        "name": "shardRegion",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "definition": "label_values(akka_actor_live_actors{job=~\"$job\"},actor_category)",
+        "description": "`/user` actors created by end-users, `/system` actors created by internal frameworks, or both.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "actor types",
+        "multi": false,
+        "name": "actor_category",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(akka_actor_live_actors{job=~\"$job\"},actor_category)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
         "type": "query"
       },
       {
@@ -1974,6 +1989,6 @@
   "timezone": "",
   "title": "Akka.NET Cluster + Phobos Metrics",
   "uid": "fm-cB0241",
-  "version": 30,
+  "version": 43,
   "weekStart": ""
 }
