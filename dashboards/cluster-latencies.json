@@ -214,7 +214,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval]))",
+          "expr": "sum(increase(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval:2m]))",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -286,7 +286,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval]))",
+          "expr": "sum(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval:2m]))",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -360,7 +360,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by(messagetype)(increase(akka_messages_recv_msgs_total{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum by(messagetype)(increase(akka_messages_recv_msgs_total{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m]))",
           "instant": true,
           "legendFormat": "{{messagetype}}",
           "range": false,
@@ -529,7 +529,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.50, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) * 1000",
           "legendFormat": "P50",
           "range": true,
           "refId": "A"
@@ -540,7 +540,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.95, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) * 1000",
           "legendFormat": "P95",
           "range": true,
           "refId": "B"
@@ -551,7 +551,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.99, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) * 1000",
           "legendFormat": "P99",
           "range": true,
           "refId": "C"
@@ -928,7 +928,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by(messagetype)(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum by(messagetype)(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m]))",
           "legendFormat": "{{messagetype}}",
           "range": true,
           "refId": "A"
@@ -1040,7 +1040,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by(exceptiontype)(increase(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
+          "expr": "topk(10, sum by(exceptiontype)(increase(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -1158,7 +1158,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by(exceptiontype)(rate(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum by(exceptiontype)(rate(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m]))",
           "legendFormat": "{{exceptiontype}}",
           "range": true,
           "refId": "A"
@@ -1225,7 +1225,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_unhandled_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum(increase(akka_messages_unhandled_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m]))",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -1293,7 +1293,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_deadletters_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum(increase(akka_messages_deadletters_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m]))",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
