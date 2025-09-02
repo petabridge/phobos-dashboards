@@ -632,7 +632,7 @@
           "axisPlacement": "left",
           "decimals": 0,
           "reverse": false,
-          "unit": "s"
+          "unit": "ms"
         }
       },
       "pluginVersion": "11.0.0",
@@ -814,8 +814,8 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
-          "legendFormat": "Average",
+          "expr": "max(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
+          "legendFormat": "Max",
           "range": true,
           "refId": "A"
         },
@@ -825,8 +825,8 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
-          "legendFormat": "Max",
+          "expr": "avg(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
+          "legendFormat": "Mean",
           "range": true,
           "refId": "B"
         },
@@ -836,11 +836,10 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "quantile_over_time(0.95, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
-          "legendFormat": "P95",
+          "expr": "quantile(0.50, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
+          "legendFormat": "Median",
           "range": true,
-          "refId": "C",
-          "interval": "2m"
+          "refId": "C"
         }
       ],
       "title": "Mailbox Depth (Backlog)",
@@ -1047,7 +1046,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by(exceptiontype)(increase(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
+          "expr": "topk(10, sum by(exceptiontype)(increase(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))) or vector(0)",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -1166,7 +1165,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by(exceptiontype)(rate(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum by(exceptiontype)(rate(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) or vector(0)",
           "legendFormat": "{{exceptiontype}}",
           "range": true,
           "refId": "A",
@@ -1234,7 +1233,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_unhandled_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum(increase(akka_messages_unhandled_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) or vector(0)",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -1303,7 +1302,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_deadletters_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum(increase(akka_messages_deadletters_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])) or vector(0)",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -1426,7 +1425,7 @@
           "type": "prometheus",
           "uid": "$datasource"
         },
-        "definition": "label_values(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"},actortype)",
+        "definition": "query_result(sort_desc(sum by(actortype)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"})))",
         "hide": 0,
         "includeAll": false,
         "label": "actor",
@@ -1435,11 +1434,11 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"},actortype)",
+          "query": "query_result(sort_desc(sum by(actortype)(akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"})))",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
-        "regex": "",
+        "regex": "/.*actortype=\"(.*)\".*/",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
