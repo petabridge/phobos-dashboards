@@ -165,7 +165,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Total messages processed recently",
+      "description": "Total messages processed in the last 30 minutes",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -214,14 +214,14 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval:30s]))",
+          "expr": "increase(sum(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"})[30m:])",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Recent Message Volume",
+      "title": "Messages (Last 30m)",
       "type": "stat"
     },
     {
@@ -286,8 +286,8 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(irate(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval:30s]))",
-          "instant": true,
+          "expr": "sum(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[5m]))",
+          "instant": false,
           "legendFormat": "__auto",
           "range": false,
           "refId": "A"
@@ -831,7 +831,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "quantile_over_time(0.95, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:30s])",
+          "expr": "quantile_over_time(0.95, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])",
           "legendFormat": "P95",
           "range": true,
           "refId": "C"
@@ -1040,7 +1040,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by(exceptiontype)(increase(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:30s])))",
+          "expr": "topk(10, sum by(exceptiontype)(increase(akka_actor_restarts_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[30m:])))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -1225,7 +1225,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_unhandled_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:30s]))",
+          "expr": "increase(sum(akka_messages_unhandled_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})[30m:])",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -1293,7 +1293,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_deadletters_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:30s]))",
+          "expr": "increase(sum(akka_messages_deadletters_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})[30m:])",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
