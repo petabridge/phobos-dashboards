@@ -54,7 +54,7 @@
         "builtIn": 1,
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "$datasource"
         },
         "enable": true,
         "hide": true,
@@ -65,7 +65,7 @@
     ]
   },
   "description": "System-wide Akka.NET metrics used for profiling Akka.NET performance. Gathered via Phobos and OpenTelemetry. Built for Phobos 2.x.",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "gnetId": 15637,
   "graphTooltip": 0,
@@ -102,7 +102,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Total number of active Akka.Cluster Members.",
       "fieldConfig": {
@@ -153,7 +153,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -166,7 +166,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -179,7 +179,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -192,7 +192,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -205,7 +205,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -218,7 +218,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -235,7 +235,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "All nodes in the cluster that are detected to be unreachable.",
       "fieldConfig": {
@@ -286,7 +286,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -303,7 +303,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Tracks all nodes by their membership status and reachability.",
       "fieldConfig": {
@@ -386,7 +386,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -399,7 +399,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -416,7 +416,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Status of all Akka.NET applications in the current job / instance. Current up to the minute.",
       "fieldConfig": {
@@ -479,7 +479,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "disableTextWrap": false,
           "editorMode": "code",
@@ -497,7 +497,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "(\r\n  sum by (instance) (\r\n    akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"}\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
@@ -510,41 +510,44 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true,
-          "refId": "C"
+          "refId": "C",
+          "interval": "2m"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__range])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true,
-          "refId": "D"
+          "refId": "D",
+          "interval": "2m"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{level=\"error\", job=~\"$job\", instance=~\"$instance\"}[$__range])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{level=\"error\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
           "range": true,
-          "refId": "E"
+          "refId": "E",
+          "interval": "2m"
         }
       ],
       "title": "Akka.NET Instances",
@@ -621,7 +624,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "description": "Total aggregate logging activity per-second for each node in an Akka.NET cluster.",
           "fieldConfig": {
@@ -772,14 +775,14 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$datasource"
               },
               "editorMode": "code",
               "exemplar": true,
-              "expr": "sum by(level)(ceil(irate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+              "expr": "sum by(level)(ceil(irate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
               "format": "time_series",
               "instant": false,
-              "interval": "",
+              "interval": "2m",
               "intervalFactor": 1,
               "legendFormat": "{{level}} / s",
               "refId": "A"
@@ -791,7 +794,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "description": "Groups all exceptions detected in Akka.NET logs by type.",
           "fieldConfig": {
@@ -866,14 +869,14 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$datasource"
               },
               "editorMode": "code",
               "exemplar": true,
-              "expr": "sum by(job, instance, akka_address, exceptiontype)(ceil(increase(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\",exceptiontype=~\".+\"}[$__range])))",
+              "expr": "sum by(job, instance, akka_address, exceptiontype)(ceil(increase(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\",exceptiontype=~\".+\"}[$__rate_interval])))",
               "format": "table",
               "instant": true,
-              "interval": "",
+              "interval": "2m",
               "intervalFactor": 1,
               "legendFormat": "{{label_name}}",
               "refId": "A"
@@ -899,7 +902,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "description": "Total errors logged by Akka.NET over the time window.",
           "fieldConfig": {
@@ -961,14 +964,14 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
+                "uid": "$datasource"
               },
               "editorMode": "code",
               "exemplar": true,
-              "expr": "sum(floor(increase(akka_logs_events_total{level=\"error\",job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+              "expr": "sum(floor(increase(akka_logs_events_total{level=\"error\",job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
               "format": "time_series",
               "instant": false,
-              "interval": "",
+              "interval": "2m",
               "intervalFactor": 1,
               "legendFormat": "",
               "refId": "A"
@@ -1019,7 +1022,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "All actor message processing activity",
       "fieldConfig": {
@@ -1099,40 +1102,43 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (actor_category)(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "sum by (actor_category)(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
           "instant": false,
           "legendFormat": "{{actor_category}} msgs / second",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "interval": "2m"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(ceil(irate(akka_messages_deadletters_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "sum(ceil(irate(akka_messages_deadletters_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "legendFormat": "{{actor_category}} deadletters / second",
           "range": true,
-          "refId": "B"
+          "refId": "B",
+          "interval": "2m"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(ceil(irate(akka_messages_unhandled_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "sum(ceil(irate(akka_messages_unhandled_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "legendFormat": "unhandled msgs / second",
           "range": true,
-          "refId": "C"
+          "refId": "C",
+          "interval": "2m"
         }
       ],
       "title": "Total Actor Message Processing (msg/s)",
@@ -1141,7 +1147,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "The full set of Akka.NET actors running on all nodes for all roles in a cluster.",
       "fieldConfig": {
@@ -1224,7 +1230,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -1243,7 +1249,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Cumulative Akka.NET messaging throughput across all selected nodes and roles.",
       "fieldConfig": {
@@ -1305,16 +1311,16 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (actor_category)(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__range])))",
+          "expr": "sum by (actor_category)(ceil(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])))",
           "format": "time_series",
           "instant": false,
-          "interval": "",
+          "interval": "2m",
           "intervalFactor": 1,
-          "legendFormat": "{{actor_categry}}",
+          "legendFormat": "{{actor_category}}",
           "range": true,
           "refId": "A"
         }
@@ -1325,7 +1331,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "All actor counts by type.",
       "fieldConfig": {
@@ -1380,7 +1386,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -1431,7 +1437,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Akka.NET message throughput by message type.",
       "fieldConfig": {
@@ -1484,15 +1490,15 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range])))",
+          "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval])))",
           "format": "time_series",
           "hide": false,
           "instant": true,
-          "interval": "",
+          "interval": "2m",
           "legendFormat": "{{messagetype}}",
           "refId": "A"
         }
@@ -1503,7 +1509,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Akka.NET message throughput by message type.",
       "fieldConfig": {
@@ -1556,28 +1562,28 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range])))",
+          "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval])))",
           "hide": false,
           "instant": true,
-          "interval": "",
+          "interval": "2m",
           "legendFormat": "{{messagetype}}",
           "refId": "A"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range]))",
+          "expr": "sum by(messagetype)(irate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval]))",
           "hide": true,
           "instant": false,
-          "interval": "",
+          "interval": "2m",
           "legendFormat": "{{messagetype}}",
           "refId": "B"
         }
@@ -1588,7 +1594,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Top 10 actor type / exception type pairs, based on the number of crashes per second observed over a 30 minute timespan.",
       "fieldConfig": {
@@ -1641,14 +1647,14 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__range])))",
+          "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval])))",
           "format": "table",
           "instant": true,
-          "interval": "",
+          "interval": "2m",
           "legendFormat": "{{actortype}},{{exceptiontype}}",
           "refId": "A"
         }
@@ -1686,7 +1692,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Shows the distribution of $shardRegion shards across all nodes in the cluster.",
       "fieldConfig": {
@@ -1741,7 +1747,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -1759,7 +1765,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "$datasource"
       },
       "description": "Shows the distribution of $shardRegion entities across all nodes in the cluster. Please note that this number reflects the total number of ALIVE entity actors.",
       "fieldConfig": {
@@ -1814,7 +1820,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -1839,17 +1845,36 @@
   "templating": {
     "list": [
       {
-        "allValue": ".*",
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data source",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "$datasource"
         },
         "definition": "label_values(akka_actor_live_actors,job)",
         "description": "The name of the OTEL workload.",
         "hide": 0,
         "includeAll": true,
-        "label": "job",
+        "label": "Job",
         "multi": true,
         "name": "job",
         "options": [],
@@ -1865,17 +1890,17 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "$datasource"
         },
         "definition": "label_values(akka_actor_live_actors{job=~\"$job\"},instance)",
         "description": "Single instance of a particular job.",
         "hide": 0,
         "includeAll": true,
-        "label": "instance",
+        "label": "Instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -1891,11 +1916,11 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "$datasource"
         },
         "definition": "label_values(akka_cluster_sharding_shards{job=~\"$job\", instance=~\"$instance\"},region)",
         "description": "All of the available shardRegions in the current Akka.NET cluster.",
@@ -1917,11 +1942,11 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "${DS_PROMETHEUS}"
+          "uid": "$datasource"
         },
         "definition": "label_values(akka_actor_live_actors{job=~\"$job\"},actor_category)",
         "description": "`/user` actors created by end-users, `/system` actors created by internal frameworks, or both.",
