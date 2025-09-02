@@ -529,7 +529,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le))",
+          "expr": "histogram_quantile(0.50, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) or vector(0)",
           "legendFormat": "P50",
           "range": true,
           "refId": "A"
@@ -540,7 +540,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) or vector(0)",
           "legendFormat": "P95",
           "range": true,
           "refId": "B"
@@ -551,7 +551,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) or vector(0)",
           "legendFormat": "P99",
           "range": true,
           "refId": "C"
@@ -1383,7 +1383,7 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
@@ -1409,7 +1409,7 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
@@ -1437,7 +1437,7 @@
         "useTags": false
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {},
         "datasource": {
           "type": "prometheus",
