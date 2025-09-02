@@ -1383,7 +1383,7 @@
         "type": "query"
       },
       {
-        "allValue": ".+",
+        "allValue": ".*",
         "current": {},
         "datasource": {
           "type": "prometheus",
@@ -1409,7 +1409,7 @@
         "type": "query"
       },
       {
-        "allValue": ".+",
+        "allValue": ".*",
         "current": {},
         "datasource": {
           "type": "prometheus",
@@ -1437,7 +1437,7 @@
         "useTags": false
       },
       {
-        "allValue": ".+",
+        "allValue": ".*",
         "current": {},
         "datasource": {
           "type": "prometheus",
