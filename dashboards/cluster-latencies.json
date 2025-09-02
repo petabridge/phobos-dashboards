@@ -529,7 +529,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.50, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le))",
           "legendFormat": "P50",
           "range": true,
           "refId": "A"
@@ -540,7 +540,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.95, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le))",
           "legendFormat": "P95",
           "range": true,
           "refId": "B"
@@ -551,7 +551,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(rate(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.99, sum(rate(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le))",
           "legendFormat": "P99",
           "range": true,
           "refId": "C"
@@ -639,7 +639,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(akka_messages_latency_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__interval])) by (le)",
+          "expr": "sum(increase(akka_messages_latency_milliseconds_bucket{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m])) by (le)",
           "format": "heatmap",
           "legendFormat": "{{le}}",
           "range": true,
@@ -831,7 +831,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "quantile(0.95, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
+          "expr": "quantile_over_time(0.95, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:30s])",
           "legendFormat": "P95",
           "range": true,
           "refId": "C"
@@ -928,7 +928,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by(messagetype)(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:2m]))",
+          "expr": "sum by(messagetype)(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", messagetype=~\"$msgtype\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval:5m]))",
           "legendFormat": "{{messagetype}}",
           "range": true,
           "refId": "A"
