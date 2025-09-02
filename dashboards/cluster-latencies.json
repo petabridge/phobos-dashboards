@@ -286,8 +286,8 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[5m]))",
-          "instant": false,
+          "expr": "sum(rate(akka_messages_recv_msgs_total{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\", messagetype=~\"$msgtype\"}[$__rate_interval:5m]))",
+          "instant": true,
           "legendFormat": "__auto",
           "range": false,
           "refId": "A"
