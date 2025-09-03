@@ -1149,6 +1149,148 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
+      "description": "Average number of unprocessed messages in actor mailboxes. Higher values indicate system pressure and potential bottlenecks.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Messages in Queue",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 300000,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "orange",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "msgs"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg Backlog"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 155,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "maxHeight": 600,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "avg by(instance)(akka_actor_mailbox_depth_msgs{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"})",
+          "instant": false,
+          "legendFormat": "{{instance}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "avg(akka_actor_mailbox_depth_msgs{job=~\"$job\", instance=~\"$instance\", actor_category=~\"$actor_category\"})",
+          "instant": false,
+          "legendFormat": "Avg Backlog",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Actor Mailbox Backlog (System Pressure)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "The full set of Akka.NET actors running on all nodes for all roles in a cluster.",
       "fieldConfig": {
         "defaults": {
@@ -1208,7 +1350,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 34
+        "y": 42
       },
       "id": 4,
       "options": {
@@ -1285,7 +1427,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 34
+        "y": 42
       },
       "id": 16,
       "maxDataPoints": 100,
@@ -1366,7 +1508,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 43
+        "y": 51
       },
       "id": 14,
       "options": {
@@ -1463,7 +1605,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 43
+        "y": 51
       },
       "id": 21,
       "options": {
@@ -1535,7 +1677,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 52
+        "y": 60
       },
       "id": 18,
       "options": {
@@ -1627,7 +1769,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 52
+        "y": 60
       },
       "id": 20,
       "options": {
@@ -1720,7 +1862,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 62
+        "y": 70
       },
       "id": 56,
       "options": {
@@ -1793,7 +1935,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 62
+        "y": 70
       },
       "id": 57,
       "options": {

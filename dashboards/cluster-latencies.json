@@ -676,7 +676,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Real-time actor mailbox depth (message backlog)",
+      "description": "Real-time actor mailbox depth showing unprocessed messages in queue",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -732,7 +732,7 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "msgs"
         },
         "overrides": [
           {
@@ -814,8 +814,8 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
-          "legendFormat": "Max",
+          "expr": "sum by(instance)(last_over_time(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[1m]))",
+          "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
         },
@@ -825,7 +825,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
+          "expr": "avg(last_over_time(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[1m]))",
           "legendFormat": "Mean",
           "range": true,
           "refId": "B"
@@ -836,7 +836,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "quantile(0.50, akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"})",
+          "expr": "quantile(0.50, last_over_time(akka_actor_mailbox_depth_msgs{actortype=\"$actortype\", job=~\"$job\", instance=~\"$instance\"}[1m]))",
           "legendFormat": "Median",
           "range": true,
           "refId": "C"
