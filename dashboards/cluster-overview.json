@@ -500,7 +500,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"}\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "expr": "(\r\n  sum by (instance) (\r\n    akka_actor_live_actors{job=~\"$job\", instance=~\"$instance\"}\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\n",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
@@ -513,7 +513,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
@@ -527,7 +527,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\n",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
@@ -541,7 +541,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{level=\"error\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[1m])\r\n  )\r\n)\r\n",
+          "expr": "(\r\n  sum by (instance) (\r\n    rate(akka_logs_events_total{level=\"error\", job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])\r\n  )\r\n  and on (instance)\r\n  max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\nor on (instance)\r\n(\r\n  0 * max by (instance) (\r\n    max_over_time(akka_cluster_members{job=~\"$job\", instance=~\"$instance\", status=~\"(Up|WeaklyUp|Joining|Leaving|Exiting)\"}[$__rate_interval])\r\n  )\r\n)\r\n",
           "hide": false,
           "instant": false,
           "legendFormat": "{{instance}}",
@@ -1785,6 +1785,22 @@
         "showHeader": true
       },
       "pluginVersion": "11.0.0",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "actortype": "Actor Type",
+              "exceptiontype": "Exception Type",
+              "Value": "Crash Rate"
+            }
+          }
+        }
+      ],
       "targets": [
         {
           "datasource": {
