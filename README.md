@@ -147,14 +147,9 @@ For a complete list of available metrics, see the [Phobos Metrics Documentation]
 
 ## License 📄
 
-Copyright © 2015-2024 [Petabridge, LLC](https://petabridge.com/)
+Copyright © 2015-2025 [Petabridge, LLC](https://petabridge.com/)
 
 These dashboards are provided as part of the Phobos product suite. See [Phobos licensing](https://phobos.petabridge.com/articles/licensing.html) for details.
-
-## Contributing 🤝
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
 ---
 
 Built with ❤️ by [Petabridge](https://petabridge.com/) - Your Akka.NET Success Partner
