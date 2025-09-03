@@ -23,9 +23,14 @@ Monitor your entire Akka.NET cluster's health and performance metrics at a glanc
 ![Cluster Status](images/cluster-overview-top.png)
 *Real-time cluster membership tracking with node status, message rates, and instance details*
 
-#### Logging, Errors, and Actor Metrics
+#### Logging, and Error Tracking
 ![Logging and Actor Metrics](images/cluster-overview-middle.png)
-*Monitor logging activity, exception tracking, and actor message processing performance*
+*Monitor logging activity and exception tracking*
+
+#### Actor Counts, Message Throughputs, and Backpressure Monitoring
+
+![Akka.NET Actor Counts, Message Throughputs, and Backpressure Monitoring](images/cluster-actor-metrics.png)
+*Track actor message processing, backlog, and volumes. Record actor populations per-node, per-application.*
 
 #### Sharding Statistics and Message Flow
 ![Sharding Statistics](images/cluster-overview-bottom.png)
@@ -38,7 +43,6 @@ Monitor your entire Akka.NET cluster's health and performance metrics at a glanc
 - Actor system metrics across all nodes including mailbox backlogs
 - Exception tracking with detailed type breakdown
 - Sharding statistics for distributed actors
-- System resource utilization (CPU, memory, threads)
 
 **Use Cases:**
 - Production cluster monitoring and health checks
@@ -79,63 +83,20 @@ Deep-dive into individual actor performance metrics and message processing patte
 
 ## Installation 🚀
 
-### Import via Grafana UI
+**[→ Import Cluster Overview Dashboard from Grafana Cloud](https://grafana.com/grafana/dashboards/15637-akka-net-cluster-phobos-2-5-metrics/)**
 
-1. Open Grafana and navigate to **Dashboards** → **Import**
-2. Upload the JSON file for the dashboard you want to import:
-   - `dashboards/cluster-overview.json` - Cluster Overview Dashboard
-   - `dashboards/actor-performance.json` - Actor Performance Dashboard
-3. Select your Prometheus data source
-4. Click **Import**
+**[→ Import Actor Performance Dashboard from Grafana Cloud](https://grafana.com/grafana/dashboards/15638-akka-net-cluster-phobos-2-x-message-latency-metrics-prometheus-data-source/)**
 
-### Import via Grafana API
+Or import manually:
 
-```bash
-# Import Cluster Overview Dashboard
-curl -X POST http://localhost:3000/api/dashboards/db \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d @dashboards/cluster-overview.json
-
-# Import Actor Performance Dashboard
-curl -X POST http://localhost:3000/api/dashboards/db \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d @dashboards/actor-performance.json
-```
+1. Navigate to **Dashboards** → **Import** in Grafana
+2. Copy the JSON content from the dashboard files in this repo
+3. Paste into the import dialog
+4. Select your Prometheus data source
 
 ## Configuration ⚙️
 
-### Phobos Setup
-
-Ensure your Akka.NET application is properly configured with Phobos. Follow the [official Phobos setup guide](https://phobos.petabridge.com/articles/setup/index.html) for detailed instructions.
-
-Basic configuration example:
-
-```hocon
-phobos {
-  monitoring {
-    monitor-mailbox-depth = on
-    monitor-actor-lifecycle = on
-    monitor-messages = on
-  }
-  
-  tracing {
-    provider-type = "OpenTelemetry"
-  }
-}
-```
-
-### OpenTelemetry Metrics Export
-
-Configure OpenTelemetry to export metrics to Prometheus:
-
-```csharp
-using var meterProvider = Sdk.CreateMeterProviderBuilder()
-    .AddPhobosInstrumentation()
-    .AddPrometheusExporter()
-    .Build();
-```
+**[→ Phobos Setup Guide](https://phobos.petabridge.com/articles/setup/index.html)**
 
 ### Dashboard Variables
 
