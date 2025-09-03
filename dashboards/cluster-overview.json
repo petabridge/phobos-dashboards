@@ -875,7 +875,7 @@
               "exemplar": true,
               "expr": "sum by(job, instance, akka_address, exceptiontype)(ceil(increase(akka_logs_events_total{job=~\"$job\", instance=~\"$instance\",exceptiontype=~\".+\"}[$__rate_interval]))) or vector(0)",
               "format": "table",
-              "instant": false,
+              "instant": true,
               "interval": "2m",
               "intervalFactor": 1,
               "legendFormat": "{{label_name}}",
@@ -1639,7 +1639,7 @@
           "expr": "topk(10,sum by(messagetype)(increase(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval])))",
           "format": "time_series",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "2m",
           "legendFormat": "{{messagetype}}",
           "refId": "A"
@@ -1710,7 +1710,7 @@
           "exemplar": true,
           "expr": "topk(10,sum by(messagetype)(rate(akka_messages_recv_msgs_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval])))",
           "hide": false,
-          "instant": false,
+          "instant": true,
           "interval": "2m",
           "legendFormat": "{{messagetype}}",
           "refId": "A"
@@ -1795,7 +1795,7 @@
           "exemplar": true,
           "expr": "topk(10,sum by(actortype, exceptiontype)(rate(akka_actor_restarts_total{job=~\"$job\", instance=~\"$instance\",actor_category=~\"$actor_category\"}[$__rate_interval]))) or vector(0)",
           "format": "table",
-          "instant": false,
+          "instant": true,
           "interval": "2m",
           "legendFormat": "{{actortype}},{{exceptiontype}}",
           "refId": "A"
