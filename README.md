@@ -13,6 +13,23 @@ These dashboards provide comprehensive monitoring capabilities for Akka.NET appl
 - Akka.NET application instrumented with [Phobos 2.x](https://phobos.petabridge.com/articles/setup/index.html)
 - OpenTelemetry metrics exporter configured
 
+## Installation 🚀
+
+**[→ Import Cluster Overview Dashboard from Grafana Cloud](https://grafana.com/grafana/dashboards/15637)**
+
+**[→ Import Actor Performance Dashboard from Grafana Cloud](https://grafana.com/grafana/dashboards/15638)**
+
+Or import manually:
+
+1. Navigate to **Dashboards** → **Import** in Grafana
+2. Copy the JSON content from the dashboard files in this repo
+3. Paste into the import dialog
+4. Select your Prometheus data source
+
+## Configuration ⚙️
+
+**[→ Phobos Setup Guide](https://phobos.petabridge.com/articles/setup/index.html)**
+
 ## Available Dashboards 📈
 
 ### Cluster Overview Dashboard 🌐
@@ -81,32 +98,6 @@ Deep-dive into individual actor performance metrics and message processing patte
 - Capacity planning for actor systems
 - Latency spike investigation
 
-## Installation 🚀
-
-**[→ Import Cluster Overview Dashboard from Grafana Cloud](https://grafana.com/grafana/dashboards/15637-akka-net-cluster-phobos-2-5-metrics/)**
-
-**[→ Import Actor Performance Dashboard from Grafana Cloud](https://grafana.com/grafana/dashboards/15638-akka-net-cluster-phobos-2-x-message-latency-metrics-prometheus-data-source/)**
-
-Or import manually:
-
-1. Navigate to **Dashboards** → **Import** in Grafana
-2. Copy the JSON content from the dashboard files in this repo
-3. Paste into the import dialog
-4. Select your Prometheus data source
-
-## Configuration ⚙️
-
-**[→ Phobos Setup Guide](https://phobos.petabridge.com/articles/setup/index.html)**
-
-### Dashboard Variables
-
-Both dashboards support the following template variables:
-
-- **`$cluster`** - Filter by Akka.NET cluster name
-- **`$node`** - Filter by specific node/host
-- **`$actor_system`** - Filter by actor system name
-- **`$actor_path`** - Filter by actor path (Actor Performance dashboard)
-
 ## Metrics Reference 📊
 
 ### Key Metrics Monitored
@@ -120,7 +111,7 @@ Both dashboards support the following template variables:
 - **`akka_system_cpu_usage`** - CPU utilization
 - **`akka_system_memory_used`** - Memory consumption
 
-For a complete list of available metrics, see the [Phobos Metrics Documentation](https://phobos.petabridge.com/articles/metrics/index.html).
+For a complete list of available metrics, see the ["What Data Does Phobos Capture?"](https://phobos.petabridge.com/articles/captured-data.html).
 
 ## Troubleshooting 🔧
 
