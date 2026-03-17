@@ -17,22 +17,22 @@ jobs:
         run: |
           # Create directories for release assets
           mkdir -p release-assets/phobos-2.x
-          
+
           # Copy current Phobos 2.x dashboards
           if [ -d "prometheus/phobos-2.x" ]; then
             cp prometheus/phobos-2.x/*.json release-assets/phobos-2.x/ 2>/dev/null || true
           fi
-          
+
           # If we have the new structure, copy from there too
           if [ -d "dashboards" ]; then
             cp dashboards/*.json release-assets/phobos-2.x/ 2>/dev/null || true
           fi
-          
+
           # Create a zip of the dashboards
           cd release-assets
           zip -r phobos-dashboards-${{ github.ref_name }}.zip phobos-2.x/
           cd ..
-          
+
           # If this is a legacy release tag, also package the archive
           if [[ "${{ github.ref_name }}" == *"legacy"* ]]; then
             if [ -d "archive/phobos-1.x" ]; then
@@ -42,6 +42,17 @@ jobs:
             fi
           fi
 
+      - name: "Extract latest release notes"
+        shell: pwsh
+        run: |
+          $content = Get-Content RELEASE_NOTES.md -Raw
+          # Match from the first #### heading to just before the second one
+          if ($content -match '(?s)(####.+?)(?=\n####|\z)') {
+            $Matches[1].Trim() | Set-Content RELEASE_NOTES_LATEST.md
+          } else {
+            $content | Set-Content RELEASE_NOTES_LATEST.md
+          }
+
       - name: Create Release
         uses: actions/create-release@v1
         id: create_release
@@ -50,7 +61,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref_name }}
-          body_path: RELEASE_NOTES.md
+          body_path: RELEASE_NOTES_LATEST.md
           draft: false
           prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') || contains(github.ref_name, 'rc') }}
 
